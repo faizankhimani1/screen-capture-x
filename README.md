@@ -3,7 +3,7 @@
 
 > Free browser-based screen recorder — capture screen, webcam & audio. No install, no signup.
 
-**Live Demo:** https://screencapturex.vercel.app  
+**Live Demo:** https://screen-capture-x.netlify.app/  
 **Developed by:** [Faizan Khimani](https://faizankhimani.netlify.app/)
 
 ---
