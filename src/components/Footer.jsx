@@ -19,7 +19,7 @@ const LINKS = [
   {
     label: 'WhatsApp',
     icon: 'whatsapp',
-    href: 'https://wa.me/911234567890',
+    href: 'https://wa.me/918999282582',
     title: 'Chat on WhatsApp',
   },
   {
