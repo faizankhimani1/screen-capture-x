@@ -9,7 +9,7 @@ const LINKS = [
     icon: 'github',
     href: 'https://github.com/faizankhimani1',
     title: 'Faizan on GitHub',
-  },
+  }, 
   {
     label: 'LinkedIn',
     icon: 'linkedin',
