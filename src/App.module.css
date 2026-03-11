@@ -1,0 +1,49 @@
+.root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2.5rem 1rem 0;
+  background: var(--bg);
+  /* Subtle grid overlay */
+  background-image:
+    radial-gradient(ellipse 90% 60% at 50% -5%, rgba(255,60,60,0.07) 0%, transparent 65%),
+    linear-gradient(rgba(255,60,60,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,60,60,0.015) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+}
+
+.card {
+  width: 100%;
+  max-width: 800px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 2px 4px rgba(0,0,0,0.4),
+    0 20px 60px rgba(0,0,0,0.7),
+    0 0 80px rgba(255,60,60,0.04);
+  animation: card-enter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Subtle 3D tilt on hover */
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+.card:hover {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 4px 8px rgba(0,0,0,0.4),
+    0 30px 80px rgba(0,0,0,0.7),
+    0 0 100px rgba(255,60,60,0.06);
+  transform: translateY(-2px);
+}
+
+.body {
+  padding: 1.75rem 2rem;
+}
+
+@media (max-width: 540px) {
+  .root { padding: 1rem 0.5rem 0; }
+  .body { padding: 1.25rem 1rem; }
+}

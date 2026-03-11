@@ -1,0 +1,95 @@
+.bar {
+  background: linear-gradient(180deg, #0a0a0e 0%, #080810 100%);
+  border-bottom: 1px solid var(--border-sub);
+  padding: 0.9rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle inner shadow top */
+.bar::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+}
+
+/* Recording dot + expanding ring */
+.dotWrap {
+  position: relative;
+  width: 12px; height: 12px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #2a2a3a;
+  flex-shrink: 0;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  z-index: 2;
+}
+.dot.recording {
+  background: var(--red);
+  box-shadow: 0 0 10px var(--red), 0 0 20px rgba(255,60,60,0.3);
+  animation: blink 1s infinite;
+}
+.dot.paused {
+  background: var(--orange);
+  box-shadow: 0 0 10px var(--orange);
+}
+.dot.preview {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
+
+/* Expanding ring when recording */
+.dotWrap::before,
+.dotWrap::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid var(--red);
+  opacity: 0;
+  width: 8px; height: 8px;
+}
+
+.timer {
+  font-family: var(--font-disp);
+  font-size: 2.2rem;
+  letter-spacing: 5px;
+  color: var(--text);
+  min-width: 5.5ch;
+  animation: count-up 0.3s ease;
+  /* 3D depth effect */
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.05),
+    0 -1px 0 rgba(0,0,0,0.5),
+    0 0 20px rgba(255,255,255,0.03);
+}
+
+.size {
+  font-size: 0.65rem;
+  color: #444;
+  letter-spacing: 1px;
+  animation: fade-in 0.3s ease;
+}
+
+.label {
+  margin-left: auto;
+  font-size: 0.62rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  transition: color 0.3s;
+}
+
+/* Recording state label */
+.bar.isRecording .label { color: var(--red); }
+.bar.isPaused    .label { color: var(--orange); }
+.bar.isPreview   .label { color: var(--green); }

@@ -1,0 +1,97 @@
+.header {
+  background: linear-gradient(180deg, rgba(255,60,60,0.04) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 1.4rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanline sweep effect on header */
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  animation: shimmer 3s linear infinite;
+  background-size: 200% auto;
+  opacity: 0.4;
+}
+
+.logo {
+  font-family: var(--font-disp);
+  font-size: 1.9rem;
+  letter-spacing: 4px;
+  color: var(--text);
+  flex-shrink: 0;
+  /* Shimmer text animation */
+  background: linear-gradient(90deg, var(--text) 0%, var(--text) 40%, #fff 50%, var(--text) 60%, var(--text) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 5s linear infinite;
+}
+
+.accent {
+  /* Red accent with glow */
+  background: linear-gradient(90deg, var(--red) 0%, #ff6060 50%, var(--red) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(255,60,60,0.5));
+}
+
+.tagline {
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(255,60,60,0.03);
+  transition: all 0.3s;
+}
+.tagline:hover {
+  border-color: rgba(255,60,60,0.3);
+  color: var(--text-dim);
+  background: rgba(255,60,60,0.06);
+}
+
+.settingsBtn {
+  margin-left: auto;
+  width: 34px; height: 34px;
+  border: 1px solid var(--border-mid);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-dim);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+.settingsBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,60,60,0.15), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.settingsBtn:hover {
+  border-color: rgba(255,60,60,0.5);
+  color: var(--red);
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(255,60,60,0.2);
+}
+.settingsBtn:hover::before { opacity: 1; }
+/* Spinning gear on hover */
+.settingsBtn:hover svg {
+  animation: spin-slow 4s linear infinite;
+}

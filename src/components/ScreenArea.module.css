@@ -1,0 +1,134 @@
+.area {
+  position: relative;
+  background: #030305;
+  border: 1px solid var(--border-sub);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  user-select: none;
+  /* Inner 3D depth */
+  box-shadow:
+    inset 0 0 40px rgba(0,0,0,0.6),
+    inset 0 2px 4px rgba(255,255,255,0.02);
+  transition: box-shadow 0.4s ease;
+}
+.area:hover {
+  box-shadow:
+    inset 0 0 50px rgba(0,0,0,0.7),
+    inset 0 2px 4px rgba(255,255,255,0.02),
+    0 0 30px rgba(255,60,60,0.04);
+}
+
+/* Idle state */
+.idle { text-align: center; animation: float 4s ease-in-out infinite; }
+.idleBig {
+  font-family: var(--font-disp);
+  font-size: 6rem;
+  letter-spacing: 8px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,60,60,0.12);
+  /* 3D text effect */
+  text-shadow:
+    0 2px 0 rgba(255,60,60,0.05),
+    0 4px 8px rgba(0,0,0,0.5);
+  transition: all 0.4s ease;
+}
+.area:hover .idleBig {
+  -webkit-text-stroke: 1px rgba(255,60,60,0.25);
+  text-shadow: 0 0 40px rgba(255,60,60,0.1), 0 4px 8px rgba(0,0,0,0.5);
+}
+.idleHint {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #222230;
+  margin-top: 0.75rem;
+  transition: color 0.3s;
+}
+.area:hover .idleHint { color: #333344; }
+.idleSub {
+  font-size: 0.55rem;
+  letter-spacing: 2px;
+  color: #18181f;
+  margin-top: 0.3rem;
+}
+
+/* Recording state */
+.liveBadge {
+  position: absolute;
+  top: 12px; left: 12px;
+  background: linear-gradient(135deg, #ff3c3c, #cc1c1c);
+  color: #fff;
+  font-family: var(--font-disp);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  z-index: 10;
+  box-shadow: 0 0 12px rgba(255,60,60,0.4), 0 2px 4px rgba(0,0,0,0.4);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.pulseBorder {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255,60,60,0.3);
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+  animation: pulse-border 2s infinite;
+  z-index: 5;
+}
+
+/* Corner brackets — 3D feel */
+.pulseBorder::before,
+.pulseBorder::after {
+  content: '';
+  position: absolute;
+  width: 20px; height: 20px;
+  border-color: var(--red);
+  border-style: solid;
+  opacity: 0.6;
+}
+.pulseBorder::before {
+  top: -1px; left: -1px;
+  border-width: 2px 0 0 2px;
+}
+.pulseBorder::after {
+  bottom: -1px; right: -1px;
+  border-width: 0 2px 2px 0;
+}
+
+.recPlaceholder { text-align: center; }
+.recText {
+  font-family: var(--font-disp);
+  font-size: 4rem;
+  letter-spacing: 8px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,60,60,0.15);
+  animation: float 3s ease-in-out infinite;
+}
+.recSub {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: #1a1a22;
+  margin-top: 0.5rem;
+}
+
+/* SVG annotation overlay */
+.annotSvg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 20;
+}
+
+/* Preview video */
+.previewVideo {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  animation: fade-in 0.4s ease;
+}
