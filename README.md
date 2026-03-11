@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ScreenCaptureX 🎬
 
 > Free browser-based screen recorder — capture screen, webcam & audio. No install, no signup.
@@ -66,62 +67,7 @@ npm run build
 # Output will be in /dist folder
 ```
 
----
 
-## Deploy to Vercel (Free — Recommended)
-
-### Option A — GitHub + Vercel (Auto Deploy)
-
-1. Push project to GitHub:
-```bash
-git init
-git add .
-git commit -m "Initial commit"
-git branch -M main
-git remote add origin https://github.com/faizankhimani1/screen-capture-x.git
-git push -u origin main
-```
-
-2. Go to https://vercel.com
-3. Click "Add New Project"
-4. Import your GitHub repo
-5. Framework: **Vite** (auto-detected)
-6. Click **Deploy**
-7. Your app is live at `https://screen-capture-x.vercel.app` ✅
-
-Every `git push` will auto-redeploy! 🚀
-
----
-
-### Option B — Netlify (Drag & Drop)
-
-1. Run `npm run build`
-2. Go to https://netlify.com
-3. Drag the `/dist` folder onto the Netlify dashboard
-4. Done! ✅
-
----
-
-### Option C — GitHub Pages
-
-1. Install gh-pages:
-```bash
-npm install gh-pages --save-dev
-```
-
-2. Add to package.json scripts:
-```json
-"homepage": "https://faizankhimani1.github.io/screen-capture-x",
-"predeploy": "npm run build",
-"deploy": "gh-pages -d dist"
-```
-
-3. Deploy:
-```bash
-npm run deploy
-```
-
----
 
 ## Project Structure
 
@@ -160,26 +106,16 @@ screen-recorder/
 
 ---
 
-## Browser Support
-
-| Browser | Support |
-|---------|---------|
-| Chrome 72+ | ✅ Full |
-| Edge 79+ | ✅ Full |
-| Firefox 66+ | ✅ Partial (no system audio) |
-| Safari | ❌ MediaRecorder limited |
-
-> Requires HTTPS in production (Vercel/Netlify provide this automatically)
-
----
-
 ## Contact
 
 - 🌐 Portfolio: https://faizankhimani.netlify.app/
 - 💼 LinkedIn: https://www.linkedin.com/in/faizan-khimani-
 - 🐙 GitHub: https://github.com/faizankhimani1
-- 💬 WhatsApp: https://wa.me/911234567890
+- 💬 WhatsApp: https://wa.me/918999282582
 
 ---
 
-© 2025 ScreenCaptureX — Developed by Faizan Khimani. All rights reserved.
+© 2026 ScreenCaptureX — Developed by Faizan Khimani. All rights reserved.
+=======
+# screen-capture-x
+>>>>>>> 80e80f5d47e59cc911c35fb70c81c3de08c4bbbf
