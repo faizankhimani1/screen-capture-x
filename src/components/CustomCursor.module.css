@@ -1,96 +1,90 @@
-/* ── Hide native cursor globally ── */
+/* Hide native cursor */
 * { cursor: none !important; }
 
-/* ── Base shared styles ── */
+/* ── Shared ── */
 .dot,
-.ring,
-.particle {
+.ring {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 99999;
-  /* GPU layer — critical for smoothness */
   will-change: transform;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-/* ══════════════════════════════════
-   INNER DOT — GPU accelerated, zero lag
-══════════════════════════════════ */
+/* ══════════════════════════════
+   DOT — instant, zero lag
+   IMPORTANT: NO transition on transform!
+   Only size + color transition allowed.
+══════════════════════════════ */
 .dot {
   width: 6px;
   height: 6px;
-  background: #ff3c3c;
+  background: #fff;
   box-shadow:
-    0 0 6px rgba(255, 60, 60, 0.9),
-    0 0 14px rgba(255, 60, 60, 0.4);
-  /* No transition on transform — must be instant */
+    0 0 0 1.5px rgba(255,60,60,0.9),
+    0 0 8px  rgba(255,60,60,0.5);
+  z-index: 999999;
+  /* Only non-transform props animate */
   transition:
-    width    0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
-    height   0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.15s ease,
-    box-shadow 0.15s ease;
-  z-index: 100001;
+    width      0.12s cubic-bezier(0.34,1.56,0.64,1),
+    height     0.12s cubic-bezier(0.34,1.56,0.64,1),
+    box-shadow 0.12s ease,
+    background 0.12s ease;
 }
 .dotHover {
   width: 8px;
   height: 8px;
-  background: #ffffff;
-  box-shadow:
-    0 0 10px rgba(255,255,255,0.9),
-    0 0 20px rgba(255,60,60,0.3);
-}
-.dotClick {
-  width: 4px;
-  height: 4px;
   background: #ff3c3c;
   box-shadow:
-    0 0 14px rgba(255,60,60,1),
-    0 0 28px rgba(255,60,60,0.5);
+    0 0 0 2px rgba(255,255,255,0.5),
+    0 0 14px rgba(255,60,60,0.8);
+}
+.dotClick {
+  width: 3px;
+  height: 3px;
+  background: #ff3c3c;
+  box-shadow:
+    0 0 0 3px rgba(255,60,60,0.6),
+    0 0 20px rgba(255,60,60,0.9);
 }
 
-/* ══════════════════════════════════
-   OUTER RING — lerp smoothed
-══════════════════════════════════ */
+/* ══════════════════════════════
+   RING — lerp smoothed
+   IMPORTANT: NO transition on transform!
+   transform is handled 100% by JS RAF.
+   Only size/color/radius transition allowed.
+══════════════════════════════ */
 .ring {
   width: 32px;
   height: 32px;
+  border-radius: 4px;           /* square — unique */
   border: 1.5px solid rgba(255,60,60,0.45);
   background: transparent;
-  /* Only size/color animate — NOT transform */
+  z-index: 999998;
+  /* ZERO transition on transform — JS handles it */
   transition:
-    width    0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    height   0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-    border-color 0.2s ease,
-    background   0.2s ease,
-    box-shadow   0.2s ease;
-  z-index: 100000;
+    width         0.25s cubic-bezier(0.34,1.56,0.64,1),
+    height        0.25s cubic-bezier(0.34,1.56,0.64,1),
+    border-radius 0.25s ease,
+    border-color  0.2s ease,
+    background    0.2s ease,
+    box-shadow    0.2s ease;
 }
-.ringHover {
-  width: 50px;
-  height: 50px;
-  border-color: rgba(255,60,60,0.65);
-  background: rgba(255,60,60,0.04);
-  box-shadow:
-    0 0 18px rgba(255,60,60,0.18),
-    inset 0 0 10px rgba(255,60,60,0.06);
+.hover {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;           /* morphs to circle on hover */
+  border-color: rgba(255,60,60,0.75);
+  background: rgba(255,60,60,0.05);
+  box-shadow: 0 0 16px rgba(255,60,60,0.15);
 }
-.ringClick {
+.click {
   width: 20px;
   height: 20px;
-  border-color: rgba(255,60,60,0.9);
-  background: rgba(255,60,60,0.12);
-  box-shadow: 0 0 20px rgba(255,60,60,0.45);
-}
-
-/* ══════════════════════════════════
-   TRAIL PARTICLES
-══════════════════════════════════ */
-.particle {
-  background: radial-gradient(circle, rgba(255,60,60,0.7) 0%, transparent 70%);
-  will-change: transform, opacity;
-  z-index: 99998;
-}
+  border-radius: 50%;
+  border-color: rgba(255,60,60,1);
+  background: rgba(255,60,60,0.15);
+  box-shadow: 0 0 20px rgba(255,60,60,0.5);
+} 
