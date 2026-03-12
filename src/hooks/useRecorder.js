@@ -1,14 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import { generateFilename } from '../utils/formatters'
 
-/**
- * Status values:
- *   idle       → not recording
- *   recording  → actively recording
- *   paused     → recording paused
- *   preview    → stopped, showing preview before save/discard
- */
-
 export function useRecorder({ audioEnabled, quality }) {
   const [status, setStatus]           = useState('idle')
   const [currentBlob, setCurrentBlob] = useState(null)
@@ -17,50 +9,51 @@ export function useRecorder({ audioEnabled, quality }) {
 
   const mediaRecorderRef = useRef(null)
   const chunksRef        = useRef([])
-  const screenStreamRef  = useRef(null)
+  const micStreamRef     = useRef(null)
 
-  // ── Quality map ───────────────────────────────────────────────────────────
   const qualityMap = {
     '1080p': { width: 1920, height: 1080 },
     '720p':  { width: 1280, height: 720  },
     '480p':  { width: 854,  height: 480  },
   }
 
-  // ── Start ─────────────────────────────────────────────────────────────────
   const startRecording = useCallback(async () => {
     try {
       const videoConstraints = qualityMap[quality] || qualityMap['1080p']
 
-      // Ask user to pick screen / window / tab
-      const screenStream = await navigator.mediaDevices.getDisplayMedia({
-        video: videoConstraints,
-        audio: audioEnabled,
-      })
-      screenStreamRef.current = screenStream
-
-      // Collect all tracks (screen video + system audio)
-      const tracks = [...screenStream.getTracks()]
-
-      // ✅ FIX 1 — Mic constraints proper + echoCancellation + noiseSuppression
+      // ✅ STEP 1 — Pehle mic lo (screen share se pehle)
+      let micTracks = []
       if (audioEnabled) {
         try {
           const micStream = await navigator.mediaDevices.getUserMedia({
             audio: {
               echoCancellation: true,
               noiseSuppression: true,
-              sampleRate: 44100,
+              autoGainControl:  true,
+              sampleRate:       44100,
+              channelCount:     1,
             }
           })
-          micStream.getAudioTracks().forEach((t) => tracks.push(t))
+          micTracks = micStream.getAudioTracks()
+          micStreamRef.current = micStream
         } catch (err) {
           console.warn('Mic permission denied:', err.message)
-          // Mic ke bina recording continue rahegi
         }
       }
 
-      const combinedStream = new MediaStream(tracks)
+      // ✅ STEP 2 — Phir screen share lo
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({
+        video: videoConstraints,
+        audio: false,
+      })
 
-      // ✅ FIX 2 — opus codec explicitly add kiya — mic audio tabhi encode hoga
+      // ✅ STEP 3 — Combine karo
+      const combinedStream = new MediaStream([
+        ...screenStream.getVideoTracks(),
+        ...micTracks,
+      ])
+
+      // ✅ STEP 4 — Opus codec
       const mimeType =
         MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')
           ? 'video/webm;codecs=vp9,opus'
@@ -86,29 +79,35 @@ export function useRecorder({ audioEnabled, quality }) {
         setFileSize(blob.size)
         setStatus('preview')
         screenStream.getTracks().forEach((t) => t.stop())
+        if (micStreamRef.current) {
+          micStreamRef.current.getTracks().forEach((t) => t.stop())
+          micStreamRef.current = null
+        }
       }
 
       recorder.start(100)
       mediaRecorderRef.current = recorder
       setStatus('recording')
 
-      // User browser UI se share band kare
       screenStream.getVideoTracks()[0].onended = () => stopRecording()
 
     } catch (err) {
+      // User ne cancel kiya — mic bhi cleanup karo
+      if (micStreamRef.current) {
+        micStreamRef.current.getTracks().forEach((t) => t.stop())
+        micStreamRef.current = null
+      }
       console.error('Recording failed:', err)
       setStatus('idle')
     }
   }, [audioEnabled, quality])
 
-  // ── Stop ──────────────────────────────────────────────────────────────────
   const stopRecording = useCallback(() => {
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop()
     }
   }, [])
 
-  // ── Pause / Resume ────────────────────────────────────────────────────────
   const togglePause = useCallback(() => {
     const rec = mediaRecorderRef.current
     if (!rec) return
@@ -121,7 +120,6 @@ export function useRecorder({ audioEnabled, quality }) {
     }
   }, [status])
 
-  // ── Save (add to list + download) ─────────────────────────────────────────
   const saveRecording = useCallback((customName) => {
     if (!currentBlob) return
     const url  = URL.createObjectURL(currentBlob)
@@ -142,21 +140,18 @@ export function useRecorder({ audioEnabled, quality }) {
     setStatus('idle')
   }, [currentBlob])
 
-  // ── Discard ───────────────────────────────────────────────────────────────
   const discardRecording = useCallback(() => {
     setCurrentBlob(null)
     setFileSize(0)
     setStatus('idle')
   }, [])
 
-  // ── Rename ────────────────────────────────────────────────────────────────
   const renameRecording = useCallback((id, newName) => {
     setRecordings((prev) =>
       prev.map((r) => (r.id === id ? { ...r, name: newName + '.webm' } : r))
     )
   }, [])
 
-  // ── Delete ────────────────────────────────────────────────────────────────
   const deleteRecording = useCallback((id) => {
     setRecordings((prev) => prev.filter((r) => r.id !== id))
   }, [])
